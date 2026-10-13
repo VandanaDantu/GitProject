@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A beginner-friendly introduction to Hibernate ORM, its architecture, mapping, and common features.">
+    <title>Learn Hibernate | Hibernate Learning Assessment</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+    <div class="container header-inner">
+        <a class="brand" href="about.html">Hibernate <span>Learning Lab</span></a>
+        <nav aria-label="Main navigation">
+            <a aria-current="page" href="about.html">Learn</a>
+            <a href="test.html">Assessment</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container page-content">
+    <section class="hero">
+        <p class="eyebrow">A beginner-friendly guide</p>
+        <h1>Learn Hibernate ORM</h1>
+        <p class="hero-copy">Understand how Hibernate connects Java objects to relational databases, manages persistence, and simplifies common data operations.</p>
+        <a class="button button-primary" href="#hibernate-basics">Start learning</a>
+    </section>
+
+    <article class="learning-content">
+        <section class="content-card" id="hibernate-basics">
+            <h2>What is Hibernate?</h2>
+            <p>Hibernate is a Java object-relational mapping (ORM) framework. It helps an object-oriented Java application store, retrieve, update, and delete data in a relational database. Instead of writing JDBC code for every operation, developers map Java classes and objects to database tables and rows.</p>
+            <h3>What does ORM mean?</h3>
+            <p>ORM means <strong>object-relational mapping</strong>. A Java object represents a row, a Java class represents a database table, and an object's fields map to table columns. This mapping lets an application work with familiar Java objects while Hibernate handles much of the SQL and database connectivity. Data persistence is the process of keeping application data in durable storage such as a relational database.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>Why use Hibernate?</h2>
+            <ul>
+                <li>It reduces repetitive JDBC connection, statement, and result-set handling.</li>
+                <li>It maps Java classes to relational database tables and supports data persistence.</li>
+                <li>It provides transaction management, caching, and object-oriented query options.</li>
+                <li>Its dialect support can help an application work with different relational databases.</li>
+            </ul>
+            <h3>Hibernate and JDBC</h3>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>JDBC</th><th>Hibernate</th></tr></thead>
+                    <tbody>
+                    <tr><td>Low-level Java API for connecting to a database and executing SQL.</td><td>Higher-level ORM that maps objects and generates or executes database operations.</td></tr>
+                    <tr><td>The developer commonly manages SQL, connections, statements, and result sets.</td><td>Hibernate manages object-relational mapping and many persistence details.</td></tr>
+                    <tr><td>Offers direct control and is useful when the application needs hand-written SQL.</td><td>Can reduce repetitive code, but adds framework concepts and needs careful mapping and query design.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="content-card">
+            <h2>Hibernate architecture</h2>
+            <p>A typical application configures Hibernate for a database, creates one <code>SessionFactory</code>, and opens a short-lived <code>Session</code> when it needs to work with persistent objects.</p>
+            <ol>
+                <li><strong>Configuration:</strong> reads database connectivity settings, mappings, and the database dialect.</li>
+                <li><strong>SessionFactory:</strong> a heavyweight, thread-safe factory, normally created once for an application.</li>
+                <li><strong>Session:</strong> a short-lived unit of work used to load or persist objects; it also holds the first-level cache.</li>
+                <li><strong>Transaction:</strong> groups related changes so they can be committed together or rolled back on failure.</li>
+                <li><strong>Database:</strong> stores the relational tables and their rows.</li>
+            </ol>
+            <p>Close each Session after use. A Session is not intended to be shared between threads. This lifecycle is often called Session management.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>Entities, classes, and tables</h2>
+            <p>An entity class is a Java class that Hibernate maps to a database table. Each entity object corresponds to a row, and its fields correspond to columns. A primary key uniquely identifies each row.</p>
+            <p>An annotation makes a mapping instruction visible in the Java class. Hibernate uses annotations such as:</p>
+            <ul>
+                <li><code>@Entity</code> marks a class as a persistent entity.</li>
+                <li><code>@Table</code> optionally selects the database table name.</li>
+                <li><code>@Id</code> identifies the primary key field.</li>
+                <li><code>@GeneratedValue</code> asks Hibernate to use a configured strategy to generate key values.</li>
+            </ul>
+            <pre><code>import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "students")
+public class Student {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    protected Student() { }
+
+    public Student(String name) {
+        this.name = name;
+    }
+}</code></pre>
+            <p>The example uses Jakarta Persistence annotations, as used by modern Hibernate versions. An entity normally also has a no-argument constructor and suitable accessors.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>Configuration and database connectivity</h2>
+            <p>Hibernate needs a database connection, a dialect that describes the database's SQL variations, and mapping information for the entity classes. These settings can be supplied through Java configuration or a configuration file such as <code>hibernate.cfg.xml</code>.</p>
+            <pre><code>&lt;hibernate-configuration&gt;
+  &lt;session-factory&gt;
+    &lt;property name="hibernate.connection.driver_class"&gt;org.postgresql.Driver&lt;/property&gt;
+    &lt;property name="hibernate.connection.url"&gt;jdbc:postgresql://localhost:5432/school&lt;/property&gt;
+    &lt;property name="hibernate.connection.username"&gt;app_user&lt;/property&gt;
+    &lt;property name="hibernate.connection.password"&gt;change_me&lt;/property&gt;
+    &lt;property name="hibernate.dialect"&gt;org.hibernate.dialect.PostgreSQLDialect&lt;/property&gt;
+    &lt;mapping class="example.Student"/&gt;
+  &lt;/session-factory&gt;
+&lt;/hibernate-configuration&gt;</code></pre>
+            <p>Use environment-specific configuration and a securely managed password in a real application; the sample values above are illustrative. A JDBC driver and a reachable database are also required to run a Hibernate application. This learning assessment itself does not connect to a database.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>Session, transactions, and CRUD</h2>
+            <p>CRUD stands for create, read, update, and delete. Hibernate offers methods for these operations; each change should be made in a transaction so the application can commit successful work or roll back incomplete work.</p>
+            <pre><code>try (Session session = sessionFactory.openSession()) {
+    Transaction transaction = session.beginTransaction();
+    try {
+        Student student = new Student("Asha");
+        session.persist(student);                  // insert
+        Student found = session.find(Student.class, student.getId()); // select
+        found.setName("Asha Kumar");               // update
+        transaction.commit();
+    } catch (RuntimeException exception) {
+        transaction.rollback();
+        throw exception;
+    }
+}</code></pre>
+            <p>In a real application, keep transaction boundaries around the complete unit of work and ensure a rollback occurs if an operation fails. Hibernate can also delete an entity with <code>session.remove(entity)</code>.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>HQL and queries</h2>
+            <p>Hibernate Query Language (HQL) is an object-oriented query language. It refers to entity classes and their properties rather than directly naming database tables and columns. Hibernate translates an HQL query into database-specific SQL using the configured dialect.</p>
+            <pre><code>List&lt;Student&gt; students = session
+    .createQuery("from Student where name = :studentName", Student.class)
+    .setParameter("studentName", "Asha")
+    .getResultList();</code></pre>
+            <p>Use parameters rather than joining user input into query text. HQL is useful for entity queries; native SQL is also available when needed.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>Mapping relationships</h2>
+            <p>Relationship annotations describe how entity classes relate. Choose the relationship that matches the data model and configure the owning side and foreign key carefully.</p>
+            <ul>
+                <li><strong>One-to-one:</strong> one record is associated with one record, such as a person and a single profile.</li>
+                <li><strong>One-to-many:</strong> one parent is associated with multiple children, such as a department and employees.</li>
+                <li><strong>Many-to-one:</strong> several records refer to one parent, such as many employees belonging to one department.</li>
+                <li><strong>Many-to-many:</strong> many records on either side can be associated, such as students and courses, usually through a join table.</li>
+            </ul>
+            <p>A mapping relationship describes how related entity classes connect. In relational databases, these mappings are implemented with foreign keys and, for many-to-many relationships, a join table.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>Loading and caching</h2>
+            <p><strong>Lazy loading</strong> postpones loading related data until it is accessed. <strong>Eager loading</strong> loads the related data as part of the initial operation. Lazy loading can avoid unnecessary work, but accessing unloaded data after its Session is closed can fail. Eager loading can retrieve more data than needed, so use it thoughtfully.</p>
+            <p>The <strong>first-level cache</strong> belongs to a Session and is enabled by default: repeated loads of the same entity in one Session can reuse the managed object. The optional <strong>second-level cache</strong> is shared across Sessions for a SessionFactory when explicitly configured with a compatible cache provider. Caching can improve performance, but requires a suitable freshness and invalidation strategy.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>Advantages and limitations</h2>
+            <div class="two-column">
+                <div>
+                    <h3>Advantages</h3>
+                    <ul>
+                        <li>Less repetitive JDBC and mapping code for common persistence work.</li>
+                        <li>Object-oriented access to relational data, transactions, and HQL queries.</li>
+                        <li>Dialect and mapping support for a range of relational databases.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Limitations to understand</h3>
+                    <ul>
+                        <li>There is a learning curve, and incorrect mappings or loading choices can hurt performance.</li>
+                        <li>Generated SQL may need inspection; complex reports may be clearer with native SQL.</li>
+                        <li>It does not remove the need to understand database design, transactions, or connectivity.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="callout">
+            <h2>Ready to check your understanding?</h2>
+            <p>Write a short summary in your own words. The assessment checks for distinct concepts from this guide.</p>
+            <a class="button button-primary" href="test.html">Take the Test</a>
+        </section>
+    </article>
+</main>
+
+<footer class="site-footer"><div class="container">Hibernate Learning Assessment · Learn, summarize, and practice.</div></footer>
+</body>
+</html>
