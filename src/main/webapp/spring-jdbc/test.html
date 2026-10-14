@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Submit your Spring JDBC learning summary for assessment.">
+    <title>Spring JDBC Assessment | Spring JDBC Learning Lab</title>
+    <link rel="stylesheet" href="css/spring-jdbc.css">
+    <script defer src="js/test.js"></script>
+</head>
+<body>
+<header class="site-header">
+    <div class="container header-inner">
+        <a class="brand" href="about.html">Spring <span>JDBC Learning Lab</span></a>
+        <nav aria-label="Main navigation">
+            <a href="about.html">Learn</a>
+            <a aria-current="page" href="test.html">Assessment</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container narrow-content page-content">
+    <section class="hero hero-compact">
+        <p class="eyebrow">Your learning check</p>
+        <h1>Spring JDBC Learning Assessment</h1>
+        <p class="hero-copy">Write a summary of what you learned from the Spring JDBC guide. Your summary is checked for distinct concepts, and you need at least 35 of 50 to pass.</p>
+    </section>
+
+    <section class="content-card">
+        <p class="notice notice-info">Review <a href="about.html">the Spring JDBC learning page</a> first, then explain the ideas in your own words. Repeating the same term will not increase your score.<span id="server-note"></span></p>
+        <form action="verify.jsp" method="post" accept-charset="UTF-8">
+            <div class="form-field">
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text" autocomplete="username" required aria-describedby="username-help">
+                <small id="username-help">Use 1–9 characters and start with an uppercase English letter (A–Z).</small>
+            </div>
+            <div class="form-field">
+                <label for="email">Gmail address</label>
+                <input id="email" name="email" type="email" autocomplete="email" required aria-describedby="email-help">
+                <small id="email-help">Enter an address with a nonempty local part that ends in @gmail.com.</small>
+            </div>
+            <div class="form-field">
+                <label for="summary">Your Spring JDBC summary</label>
+                <textarea id="summary" name="summary" rows="10" required aria-describedby="summary-help"></textarea>
+                <small id="summary-help">Summarize the important ideas you learned. At least 35 distinct concepts are needed to pass.</small>
+            </div>
+            <div class="form-actions">
+                <a class="button button-secondary" href="about.html">Read About Spring JDBC</a>
+                <button class="button button-primary" type="submit">Submit for Verification</button>
+            </div>
+        </form>
+    </section>
+</main>
+
+<footer class="site-footer"><div class="container">Your details and summary are submitted by POST to the local Tomcat application.</div></footer>
+</body>
+</html>

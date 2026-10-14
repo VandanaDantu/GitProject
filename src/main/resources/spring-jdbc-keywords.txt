@@ -1,0 +1,50 @@
+Spring JDBC
+JdbcTemplate
+DataSource
+database connectivity
+dependency injection
+RowMapper
+query()
+queryForObject()
+update()
+prepared statement
+parameterized query
+CRUD
+update operation
+delete
+insert
+select
+SQL
+SQL injection
+SQLException
+DataAccessException
+exception translation
+connection
+connection management
+PreparedStatement
+ResultSet
+resource cleanup
+boilerplate code
+driver
+database URL
+credentials
+bean
+application context
+constructor injection
+@Repository
+@Autowired
+row mapping
+query parameters
+named parameters
+batch update
+transaction
+commit
+rollback
+transaction management
+PlatformTransactionManager
+JdbcTransactionManager
+DataSourceTransactionManager
+transaction boundary
+connection pool
+database vendor
+JDBC driver

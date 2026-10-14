@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A beginner-friendly guide to Spring JDBC and JdbcTemplate.">
+    <title>Learn Spring JDBC | Spring JDBC Learning Lab</title>
+    <link rel="stylesheet" href="css/spring-jdbc.css">
+</head>
+<body>
+<header class="site-header">
+    <div class="container header-inner">
+        <a class="brand" href="about.html">Spring <span>JDBC Learning Lab</span></a>
+        <nav aria-label="Main navigation">
+            <a aria-current="page" href="about.html">Learn</a>
+            <a href="test.html">Assessment</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container page-content">
+    <section class="hero">
+        <p class="eyebrow">A beginner-friendly guide</p>
+        <h1>Learn Spring JDBC</h1>
+        <p class="hero-copy">Learn how Spring simplifies database work in Java while keeping SQL visible and giving you control over your queries.</p>
+        <a class="button button-primary" href="#spring-jdbc">Start learning</a>
+    </section>
+
+    <article class="learning-content">
+        <section class="content-card" id="spring-jdbc">
+            <h2>What is Spring JDBC?</h2>
+            <p>JDBC is Java's standard API for working with relational databases. Spring JDBC is part of the Spring Framework: it keeps you in control of SQL while removing repetitive connection, statement, and result-set handling. Its central helper, <code>JdbcTemplate</code>, runs SQL and coordinates this routine work.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>Why use it instead of traditional JDBC?</h2>
+            <p>With traditional JDBC, application code commonly opens a connection, creates a statement, binds values, processes a <code>ResultSet</code>, closes each resource, and handles low-level <code>SQLException</code> errors. Repeating this boilerplate code makes code longer and resource leaks easier. Spring JDBC reduces that work and simplifies connection management and resource cleanup.</p>
+            <p><code>JdbcTemplate</code> manages these routine steps, including resource cleanup. You still write SQL and choose how query results map to Java objects. Spring also translates many database errors into its consistent unchecked <code>DataAccessException</code> hierarchy instead of requiring every caller to handle <code>SQLException</code>.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>DataSource and database connectivity</h2>
+            <p>A <code>DataSource</code> provides database connections. It represents the database connectivity settings and commonly obtains connections from a connection pool. The database URL, JDBC driver, credentials, and target database vendor must be configured for your environment. A JDBC driver translates JDBC calls for a particular database.</p>
+            <p>Spring configures a DataSource as a bean and injects it into <code>JdbcTemplate</code>. A repository can then receive the template through constructor injection; <code>@Autowired</code> is another way to mark a dependency injection point. Spring's application context creates these beans and connects them without the repository constructing its own database infrastructure.</p>
+            <pre><code>@Repository
+public class BookRepository {
+    private final JdbcTemplate jdbcTemplate;
+
+    public BookRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+}</code></pre>
+            <p>In an application, define the DataSource and a JdbcTemplate bean in configuration, or use Spring Boot's database configuration. Never hard-code production credentials in source code.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>Prepared statements and safe parameters</h2>
+            <p>Use a prepared statement (the JDBC <code>PreparedStatement</code>, also called a parameterized query) to pass values separately from SQL text. This helps prevent SQL injection and handles values using the JDBC driver. Do not concatenate user input into SQL.</p>
+            <pre><code>String sql = "select id, title from books where id = ?";
+Book book = jdbcTemplate.queryForObject(
+    sql,
+    (resultSet, rowNumber) -&gt; new Book(
+        resultSet.getLong("id"),
+        resultSet.getString("title")),
+    bookId
+);</code></pre>
+            <p>The question mark is a query parameter. With positional query parameters, the values supplied to JdbcTemplate match the question marks in order. Named parameters give values readable names instead; <code>NamedParameterJdbcTemplate</code> supports that style. In either case, JdbcTemplate binds values separately from the SQL text.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>RowMapper and query methods</h2>
+            <p>A <code>RowMapper</code> converts one row of a <code>ResultSet</code> into a Java object. It keeps row mapping separate from query execution and is called for each row returned.</p>
+            <ul>
+                <li><code>query()</code> executes a select that can return zero or more rows, usually mapped into a list.</li>
+                <li><code>queryForObject()</code> reads one expected result, such as one row or one scalar value. It reports an error if the result does not match expectations.</li>
+                <li><code>update()</code> executes an insert, update, or delete and returns the number of affected rows.</li>
+            </ul>
+            <pre><code>RowMapper&lt;Book&gt; mapper = (rs, row) -&gt;
+    new Book(rs.getLong("id"), rs.getString("title"));
+
+List&lt;Book&gt; books = jdbcTemplate.query(
+    "select id, title from books", mapper);
+
+Integer count = jdbcTemplate.queryForObject(
+    "select count(*) from books", Integer.class);</code></pre>
+        </section>
+
+        <section class="content-card">
+            <h2>CRUD examples</h2>
+            <p>CRUD means create, read, update, and delete. These examples use placeholders and parameters rather than joining input into the SQL string.</p>
+            <pre><code>// Create: insert a row
+int inserted = jdbcTemplate.update(
+    "insert into books (title) values (?)", title);
+
+// Read: select rows and map each row
+List&lt;Book&gt; books = jdbcTemplate.query(
+    "select id, title from books where title = ?",
+    mapper, title);
+
+// Update: change a row
+int changed = jdbcTemplate.update(
+    "update books set title = ? where id = ?", title, id);
+
+// Delete: remove a row
+int deleted = jdbcTemplate.update(
+    "delete from books where id = ?", id);</code></pre>
+            <p>The returned affected-row count can help the application check whether an insert, update, or delete changed the expected number of rows. An update operation is one common use of the <code>update()</code> method.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>Exceptions, transactions, and trade-offs</h2>
+            <p>Spring JDBC translates many SQL errors into <code>DataAccessException</code>, a common unchecked exception type. Handle it where the application can recover or report a useful failure; do not silently pretend a failed database operation succeeded.</p>
+            <p>A transaction groups operations into one unit of work. A transaction boundary defines which operations succeed together: the application commits when all work succeeds and rolls back when a failure occurs. Transaction management can be configured declaratively or in application code. Spring manages the commit and rollback behavior through the <code>PlatformTransactionManager</code> interface and a transaction manager such as <code>JdbcTransactionManager</code> or <code>DataSourceTransactionManager</code>.</p>
+            <ul>
+                <li><strong>Benefits:</strong> less JDBC boilerplate, consistent exception translation, easy dependency injection, and direct control over SQL.</li>
+                <li><strong>Limitations:</strong> you still design SQL and schemas, map rows, and manage transaction boundaries. It does not provide the object-relational mapping of an ORM.</li>
+            </ul>
+            <p>For larger or repeated workloads, Spring JDBC also supports batch update operations. Select the tool that fits your data access needs and keep connections, credentials, and transactions configured for the deployment environment.</p>
+        </section>
+
+        <section class="callout">
+            <h2>Ready to check your understanding?</h2>
+            <p>Summarize what you learned in your own words. The assessment looks for distinct Spring JDBC concepts; repeating a term does not add another match.</p>
+            <a class="button button-primary" href="test.html">Take the Test</a>
+        </section>
+    </article>
+</main>
+
+<footer class="site-footer"><div class="container">Spring JDBC Learning Assessment · Learn, summarize, and practice.</div></footer>
+</body>
+</html>

@@ -1,0 +1,50 @@
+Spring Framework
+Spring Core
+IoC
+Inversion of Control
+Dependency Injection
+DI
+bean
+Spring bean
+IoC container
+BeanFactory
+ApplicationContext
+XML configuration
+constructor injection
+setter injection
+autowiring
+@Autowired
+@Component
+@Configuration
+@Bean
+@ComponentScan
+@Value
+singleton
+prototype
+request scope
+session scope
+application scope
+websocket scope
+bean scope
+bean lifecycle
+initialization
+destruction
+init-method
+destroy-method
+Aware interfaces
+BeanPostProcessor
+InitializingBean
+DisposableBean
+lazy initialization
+eager initialization
+dependency
+loose coupling
+tight coupling
+object creation
+object wiring
+property
+constructor
+XML
+classpath
+context refresh
+getBean
