@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A beginner-friendly introduction to Spring Framework and Spring Core.">
+    <title>Learn Spring Core | Spring Core Learning Lab</title>
+    <link rel="stylesheet" href="css/spring-core.css">
+</head>
+<body>
+<header class="site-header">
+    <div class="container header-inner">
+        <a class="brand" href="about.html">Spring <span>Core Learning Lab</span></a>
+        <nav aria-label="Main navigation">
+            <a aria-current="page" href="about.html">Learn</a>
+            <a href="test.html">Assessment</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container page-content">
+    <section class="hero">
+        <p class="eyebrow">A beginner-friendly guide</p>
+        <h1>Learn Spring Core</h1>
+        <p class="hero-copy">See how Spring helps Java objects work together through inversion of control, dependency injection, and a container that manages object lifecycles.</p>
+        <a class="button button-primary" href="#spring-core">Start learning</a>
+    </section>
+
+    <article class="learning-content">
+        <section class="content-card" id="spring-core">
+            <h2>Spring Framework and Spring Core</h2>
+            <p>The Spring Framework is a collection of tools for building Java applications. Spring Core is its foundation: it creates and connects application objects and helps keep classes focused on their own work.</p>
+            <p>For example, a notification service can depend on a message sender interface instead of creating a particular email sender itself. That makes it easier to change or test the sender later.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>IoC and Dependency Injection</h2>
+            <p><strong>Inversion of Control (IoC)</strong> means the application gives Spring responsibility for creating and connecting many objects, rather than each class constructing all of its own dependencies. <strong>Dependency Injection (DI)</strong> is the technique Spring uses to provide an object with the other objects it needs.</p>
+            <p>In plain Java, a service might construct its dependency directly:</p>
+            <pre><code>MessageSender sender = new EmailMessageSender();
+NotificationService service = new NotificationService(sender);</code></pre>
+            <p>With DI, Spring creates the sender and supplies it to the service. The service can depend on an interface, which encourages loose coupling instead of tight coupling to one implementation.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>Beans and the Spring IoC container</h2>
+            <p>A <strong>Spring bean</strong> is an object created, configured, and managed by Spring. The Spring IoC container reads configuration, creates beans, injects their dependencies, and manages their lifecycles.</p>
+            <p><strong>BeanFactory</strong> is the basic container interface and provides bean creation and dependency injection. <strong>ApplicationContext</strong> builds on it with commonly used application features such as events, resource loading, and easier integration. Most application code uses an ApplicationContext.</p>
+            <p>For example, asking the container for a bean with <code>getBean</code> returns an object that Spring manages. The container can also build the bean graph when the application starts.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>XML-based configuration</h2>
+            <p>Spring can describe beans and their relationships in an XML configuration file. The file can be placed on the application's classpath so the container can load it during context refresh. In this example, the container creates the sender first and injects it into the service through a constructor argument:</p>
+            <pre><code>&lt;beans xmlns="http://www.springframework.org/schema/beans"&gt;
+  &lt;bean id="emailSender" class="example.EmailMessageSender" /&gt;
+  &lt;bean id="notificationService" class="example.NotificationService"&gt;
+    &lt;constructor-arg ref="emailSender" /&gt;
+  &lt;/bean&gt;
+&lt;/beans&gt;</code></pre>
+            <p>XML is one configuration option. Spring also supports Java configuration and component scanning.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>Constructor and setter injection</h2>
+            <p><strong>Constructor injection</strong> passes required dependencies when the bean is created. It makes required dependencies clear and allows fields to be final.</p>
+            <pre><code>public NotificationService(MessageSender sender) {
+    this.sender = sender;
+}</code></pre>
+            <p><strong>Setter injection</strong> provides a dependency through a setter method after construction. It can suit optional or changeable dependencies.</p>
+            <pre><code>public void setMessageSender(MessageSender sender) {
+    this.sender = sender;
+}</code></pre>
+            <p>In XML, constructor injection commonly uses <code>&lt;constructor-arg&gt;</code>; setter injection uses <code>&lt;property&gt;</code>. Choose the approach that communicates whether a dependency is required or optional.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>Autowiring and annotations</h2>
+            <p><strong>Autowiring</strong> lets Spring find and supply a matching dependency. In annotation-based configuration, <code>@Autowired</code> marks an injection point. <code>@Component</code> identifies a class Spring may discover, <code>@ComponentScan</code> tells Spring where to search, and <code>@Configuration</code> plus <code>@Bean</code> define beans in Java configuration. <code>@Value</code> can inject a configured value.</p>
+            <pre><code>@Component
+public class NotificationService {
+    private final MessageSender sender;
+
+    @Autowired
+    public NotificationService(MessageSender sender) {
+        this.sender = sender;
+    }
+}</code></pre>
+            <p>When more than one bean matches a dependency, configuration must identify the intended bean. Constructor injection makes such dependencies easy to see.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>Bean scopes</h2>
+            <p>A bean scope controls how many instances Spring creates and how long they are available.</p>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Scope</th><th>Meaning</th></tr></thead>
+                    <tbody>
+                    <tr><td><code>singleton</code></td><td>One bean instance per bean definition in a Spring container; this is the default.</td></tr>
+                    <tr><td><code>prototype</code></td><td>A new instance is created whenever the container is asked for that bean.</td></tr>
+                    <tr><td><code>request scope</code></td><td>One instance for a single web request.</td></tr>
+                    <tr><td><code>session scope</code></td><td>One instance for a web session.</td></tr>
+                    <tr><td><code>application scope</code></td><td>One instance for a web application context.</td></tr>
+                    <tr><td><code>websocket scope</code></td><td>One instance for a WebSocket session.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Request, session, application, and websocket scopes are web-aware scopes. They require a web application context.</p>
+        </section>
+
+        <section class="content-card">
+            <h2>The bean lifecycle</h2>
+            <p>A typical bean lifecycle starts when the container reads configuration and creates the object. Spring injects dependencies, may call aware interfaces, and can pass the bean through a <code>BeanPostProcessor</code> before and after initialization. It then makes the bean ready for use. When the container shuts down, it can run destruction callbacks.</p>
+            <ol>
+                <li><strong>Object creation and object wiring:</strong> Spring constructs the bean and supplies its dependencies.</li>
+                <li><strong>Initialization:</strong> custom setup can run through an init method, <code>InitializingBean</code>, or a post-processor.</li>
+                <li><strong>Use:</strong> application code works with the fully initialized bean.</li>
+                <li><strong>Destruction:</strong> a destroy method or <code>DisposableBean</code> callback can release resources when the context closes.</li>
+            </ol>
+            <p>XML can name these callbacks with <code>init-method</code> and <code>destroy-method</code>. Lazy initialization delays creation until a bean is first requested; eager initialization creates singleton beans while the context is refreshed. The exact callback behavior depends on the bean scope.</p>
+        </section>
+
+        <section class="callout">
+            <h2>Ready to check your understanding?</h2>
+            <p>Summarize the ideas in your own words. The assessment checks for distinct Spring Core concepts; repeating a term does not add another match.</p>
+            <a class="button button-primary" href="test.html">Take the Test</a>
+        </section>
+    </article>
+</main>
+
+<footer class="site-footer"><div class="container">Spring Core Learning Assessment · Learn, summarize, and practice.</div></footer>
+</body>
+</html>
