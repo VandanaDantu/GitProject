@@ -1,0 +1,50 @@
+Hibernate
+ORM
+JDBC
+Java
+database
+object
+relational
+mapping
+entity
+@Entity
+@Table
+@Id
+@GeneratedValue
+SessionFactory
+Session
+Transaction
+HQL
+CRUD
+configuration
+hibernate.cfg.xml
+annotation
+persistence
+dialect
+caching
+lazy loading
+eager loading
+database connectivity
+one-to-one
+one-to-many
+many-to-one
+many-to-many
+primary key
+Java class
+database table
+insert
+select
+update
+delete
+commit
+rollback
+query
+object-oriented
+relational database
+mapping relationship
+first-level cache
+second-level cache
+connection
+Session management
+entity class
+data persistence

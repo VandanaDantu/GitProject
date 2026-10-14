@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Your Hibernate learning assessment results.">
+    <title>Assessment Results | Hibernate Learning Assessment</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="js/display.js"></script>
+</head>
+<body>
+<header class="site-header">
+    <div class="container header-inner">
+        <a class="brand" href="about.html">Hibernate <span>Learning Lab</span></a>
+        <nav aria-label="Main navigation">
+            <a href="about.html">Learn</a>
+            <a href="test.html">Assessment</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container narrow-content page-content">
+    <section id="results" class="content-card" hidden aria-live="polite">
+        <p class="eyebrow">Your assessment</p>
+        <h1>Hibernate Learning Assessment</h1>
+        <div id="status-banner" class="status-banner"></div>
+        <dl class="result-details">
+            <div><dt>Username</dt><dd id="result-username"></dd></div>
+            <div><dt>Email</dt><dd id="result-email"></dd></div>
+            <div><dt>Matched keywords</dt><dd id="result-matches"></dd></div>
+            <div><dt>Keyword match</dt><dd id="result-percentage"></dd></div>
+            <div><dt>Marks</dt><dd id="result-marks"></dd></div>
+        </dl>
+        <section class="summary-panel">
+            <h2>Submitted summary</h2>
+            <p id="result-summary" class="preserved-text"></p>
+        </section>
+        <section class="feedback-panel">
+            <h2>Feedback</h2>
+            <p id="result-feedback"></p>
+        </section>
+        <div class="form-actions">
+            <a class="button button-secondary" href="about.html">Read About Hibernate Again</a>
+            <a class="button button-primary" href="test.html">Take Another Test</a>
+        </div>
+    </section>
+
+    <section id="no-results" class="content-card centered" hidden>
+        <p class="eyebrow">No assessment found</p>
+        <h1>Submit an assessment to see results</h1>
+        <p>This page only displays results after a valid assessment has been submitted in this browser tab.</p>
+        <div class="form-actions centered-actions">
+            <a class="button button-secondary" href="about.html">Read About Hibernate</a>
+            <a class="button button-primary" href="test.html">Take the Test</a>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer"><div class="container">Keep learning and practicing Hibernate.</div></footer>
+</body>
+</html>
